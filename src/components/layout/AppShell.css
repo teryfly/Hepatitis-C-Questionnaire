@@ -1,0 +1,11 @@
+.app-shell {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  grid-template-rows: 100%;
+  height: 100vh;
+}
+
+.app-main {
+  overflow: auto;
+  background: var(--bg);
+}
