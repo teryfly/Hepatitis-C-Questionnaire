@@ -20,7 +20,8 @@ export async function getEventsList(filters: Filters) {
   if (filters.dateRange?.start) params.append("occurredAfter", filters.dateRange.start);
   if (filters.dateRange?.end) params.append("occurredBefore", filters.dateRange.end);
 
-  params.append("fields", "event,status,deleted,dataValues,orgUnit,occurredAt");
+  // 补充 program 与 programStage 字段，便于后续UPDATE时构建有效负载
+  params.append("fields", "event,status,deleted,dataValues,orgUnit,occurredAt,program,programStage");
   params.append("paging", "true");
   params.append("pageSize", String(filters.pageSize || "10"));
   params.append("page", String(filters.page || "1"));

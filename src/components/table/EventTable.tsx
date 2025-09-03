@@ -1,17 +1,18 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { deleteEvent } from "../../services/events";
 
 interface EventTableProps {
   data: any[];
   filters: any;
   onRefresh: () => void;
+  onSelectionChange?: (selectedIds: string[]) => void;
 }
 
 const headerBase = [
   { key: "orgUnitName", label: "报告地区" },
   { key: "siteName", label: "哨点单位" },
   { key: "occurredAt", label: "调查日期" },
-  { key: "statusText", label: "状态" },
+  { key: "statusText", label: "状态" }
 ];
 
 const statusMap: Record<string, string> = {
@@ -30,7 +31,22 @@ const getDynamicHeaders = (data: any[]) => {
   return Array.from(extraKeys).map(name => ({ key: name, label: name }));
 };
 
-const EventTable: React.FC<EventTableProps> = ({ data, onRefresh }) => {
+const EventTable: React.FC<EventTableProps> = ({
+  data,
+  onRefresh,
+  onSelectionChange
+}) => {
+  const [selected, setSelected] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (onSelectionChange) onSelectionChange(selected);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected]);
+
+  useEffect(() => {
+    setSelected([]); // 数据变化时重置选择
+  }, [data]);
+
   const handleEdit = (row: any) => {
     window.open(`/apps/capture#/viewEvent?orgUnitId=${row.orgUnit}&viewEventId=${row.event}`, "_blank");
   };
@@ -42,13 +58,34 @@ const EventTable: React.FC<EventTableProps> = ({ data, onRefresh }) => {
     }
   };
 
+  const toggleRow = (id: string) => {
+    setSelected(prev =>
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
+    );
+  };
+
+  const toggleAll = () => {
+    if (selected.length === data.length) {
+      setSelected([]);
+    } else {
+      setSelected(data.map(row => row.event));
+    }
+  };
+
   const dynamicHeaders = getDynamicHeaders(data);
 
   return (
     <table className="event-table">
       <thead>
         <tr>
-          <th>□</th>
+          <th>
+            <input
+              type="checkbox"
+              checked={selected.length === data.length && data.length > 0}
+              indeterminate={selected.length > 0 && selected.length < data.length ? "indeterminate" : undefined}
+              onChange={toggleAll}
+            />
+          </th>
           {[...headerBase, ...dynamicHeaders, { key: "actions", label: "操作" }].map(h => (
             <th key={h.key}>{h.label}</th>
           ))}
@@ -59,7 +96,13 @@ const EventTable: React.FC<EventTableProps> = ({ data, onRefresh }) => {
           <tr><td colSpan={headerBase.length + dynamicHeaders.length + 2} style={{ textAlign: "center" }}>暂无数据</td></tr>
         ) : data.map((row, idx) => (
           <tr key={row.event || idx}>
-            <td><input type="checkbox" /></td>
+            <td>
+              <input
+                type="checkbox"
+                checked={selected.includes(row.event)}
+                onChange={() => toggleRow(row.event)}
+              />
+            </td>
             <td>{row.orgUnitName}</td>
             <td>{row.siteName}</td>
             <td>{row.occurredAt?.slice(0, 10) || ""}</td>

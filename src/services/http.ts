@@ -42,20 +42,21 @@ export async function fetchWithAuth(url: string, options: RequestInit = {}) {
   }
 
   if (!resp.ok) {
-    // 尝试读取文本以便输出错误详情（可能是HTML登录页或JSON错误）
     const text = await resp.text();
-    // 如果不是 JSON，直接抛可读错误，避免 JSON.parse 报错
     if (!isJSONResponse(resp)) {
-      const snippet = text.slice(0, 200);
-      throw new Error(`请求失败(非JSON响应)：${resp.status} ${resp.statusText} - ${snippet}`);
+      const snippet = text.slice(0, 1000);
+      let human = snippet;
+      const titleMatch = snippet.match(/<title>(.*?)<\/title>/i);
+      if (titleMatch?.[1]) human = titleMatch[1];
+      const bodyErr = snippet.match(/(error|exception|message)[^<>\n:]*[:>]\s*([^<\n]+)/i);
+      if (bodyErr?.[2]) human = bodyErr[2];
+      throw new Error(`请求失败(非JSON响应)：${resp.status} ${resp.statusText} - ${human}`);
     }
     throw new Error(`请求失败: ${resp.status} ${resp.statusText} - ${text}`);
   }
 
-  // 仅当响应是 JSON 时再解析
   if (isJSONResponse(resp)) {
     return await resp.json();
   }
-  // 非 JSON 场景（极少），返回原始文本
   return await resp.text();
 }
