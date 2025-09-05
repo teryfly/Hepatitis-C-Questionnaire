@@ -19,10 +19,12 @@ const PaginationBar: React.FC<PaginationBarProps> = ({
 
   return (
     <div className="pagination-bar" style={{ display: "flex", alignItems: "center", gap: 8 }}>
-      共{total}条数据
+      {/* 共{total}条数据 */}
       <button onClick={() => onPageChange(1)} disabled={page === 1}>{"<<"}</button>
       <button onClick={() => onPageChange(page - 1)} disabled={page === 1}>{"<"}</button>
-      <span>第 {page} 页 / 共 {pageCount} 页</span>
+      <span>第 {page} 页 
+        {/* / 共 {pageCount} 页 */}
+        </span>
       <button onClick={() => onPageChange(page + 1)} disabled={page === pageCount}>{" > "}</button>
       <button onClick={() => onPageChange(pageCount)} disabled={page === pageCount}>{" >> "}</button>
       <select

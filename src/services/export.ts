@@ -20,7 +20,8 @@ export async function exportTracked(filters: any) {
     "报告地区": te.orgUnitName,
     "哨点单位": te.siteName,
     "调查日期": te.enrolledAt,
-    "状态": te.statusText
+    "状态": te.statusText,
+    ...Object.fromEntries((te.attributes || []).map((d: any) => [d.displayName, d.value]))
   }));
   downloadCSV("随访问卷导出.csv", rows);
 }

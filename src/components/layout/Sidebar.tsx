@@ -34,7 +34,11 @@ const Sidebar: React.FC = () => {
       setLoading(prev => ({ ...prev, event: true }));
       try {
         const list = await getPrograms("WITHOUT_REGISTRATION");
-        setEventPrograms(list);
+        const filterList = list.length > 0 ? list.filter(item => 
+          ["CEnNqHb6CHw" ].includes(item.id)
+          // ["CEnNqHb6CHw", "dB3MQfQHGxi","XlTmqsmRggy" ].includes(item.id)
+        ):[]
+        setEventPrograms(filterList);
       } finally {
         setLoading(prev => ({ ...prev, event: false }));
       }
@@ -44,7 +48,11 @@ const Sidebar: React.FC = () => {
       setLoading(prev => ({ ...prev, tracked: true }));
       try {
         const list = await getPrograms("WITH_REGISTRATION");
-        setTrackedPrograms(list);
+        const filterList = list.length > 0 ? list.filter(item => 
+          ["uiyqEyZboeV"].includes(item.id)
+          // ["uiyqEyZboeV", "m0vJjxXFuGH", "XtWFypbYGF0"].includes(item.id)
+        ):[]
+        setTrackedPrograms(filterList);
       } finally {
         setLoading(prev => ({ ...prev, tracked: false }));
       }

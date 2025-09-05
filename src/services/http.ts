@@ -19,7 +19,9 @@ export async function fetchWithAuth(url: string, options: RequestInit = {}) {
   // 优先使用 Bearer，其次在开发模式下添加 Basic
   if (token) {
     (extraHeaders as any).Authorization = `Bearer ${token}`;
-  } else if (USE_BASIC_AUTH) {
+    // 此处：线上无token,暂时依然取消开发环境的判断
+  // } else if (USE_BASIC_AUTH) {
+  } else {
     const basic = btoa(`${DEV_BASIC_USER}:${DEV_BASIC_PASS}`);
     (extraHeaders as any).Authorization = `Basic ${basic}`;
   }
