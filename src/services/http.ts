@@ -1,43 +1,55 @@
-import { BASE_URL } from "../utils/baseUrl";
+import { getInstance } from "@dhis2/app-runtime";
 
-// 可选：在开发环境下启用 Basic Auth（用户名/密码来自 .env 或默认 admin/district）
-const DEV_BASIC_USER = import.meta.env.VITE_BASIC_USER || "admin";
-const DEV_BASIC_PASS = import.meta.env.VITE_BASIC_PASS || "district";
-const USE_BASIC_AUTH = import.meta.env.MODE === "development";
-
+// Using app-runtime's engine; this is a lightweight wrapper to keep current API.
 function isJSONResponse(resp: Response) {
-  const ct = resp.headers.get("content-type") || "";
-  return ct.includes("application/json");
+  const ct = resp.headers?.get?.("content-type") || "";
+  return typeof ct === "string" && ct.includes("application/json");
 }
 
+// Low-level fetch fallback for non-engine absolute URLs, but prefer engine for DHIS2 API calls.
 export async function fetchWithAuth(url: string, options: RequestInit = {}) {
-  const fullUrl = /^https?:\/\//i.test(url) ? url : `${BASE_URL}${url}`;
+  // If it's an absolute URL, use window.fetch (rare). Otherwise use app-runtime engine.
+  const absolute = /^https?:\/\//i.test(url);
 
-  const token = sessionStorage.getItem("dhis2.token") || "";
-  const extraHeaders: HeadersInit = {};
+  if (!absolute) {
+    // Normalize to relative api path without leading /api since engine injects it.
+    // Accept both `/path` and `path`
+    const path = url.replace(/^\/+/, "");
+    const engine = getInstance().getD2Api();
+    // If using engine.get/post isn't available, fall back to dataEngine.request
+    const dataEngine: any = (getInstance() as any).getDataEngine?.() || (getInstance() as any);
 
-  // 优先使用 Bearer，其次在开发模式下添加 Basic
-  if (token) {
-    (extraHeaders as any).Authorization = `Bearer ${token}`;
-    // 此处：线上无token,暂时依然取消开发环境的判断
-  // } else if (USE_BASIC_AUTH) {
-  } else {
-    const basic = btoa(`${DEV_BASIC_USER}:${DEV_BASIC_PASS}`);
-    (extraHeaders as any).Authorization = `Basic ${basic}`;
+    const method = (options.method || "GET").toUpperCase();
+    const body = options.body ? JSON.parse(options.body as string) : undefined;
+
+    // Use dataEngine.request for full flexibility
+    const req = {
+      method,
+      path: path.startsWith("api/") ? path.replace(/^api\//, "") : path,
+      params: undefined,
+      headers: options.headers as Record<string, string> | undefined,
+      body,
+    };
+
+    try {
+      const res = await (dataEngine.request ? dataEngine.request(req) : (engine as any).request(req));
+      return res;
+    } catch (e: any) {
+      // Re-throw with message similar to previous helper
+      throw new Error(`请求失败: ${e?.message || e}`);
+    }
   }
 
-  const headers: HeadersInit = {
-    "Content-Type": "application/json",
-    ...extraHeaders,
-    ...options.headers,
-  };
-
+  // Absolute URL fallback
   let resp: Response;
   try {
-    resp = await fetch(fullUrl, {
+    resp = await fetch(url, {
       ...options,
-      headers,
       credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+        ...(options.headers || {}),
+      },
     });
   } catch (err: any) {
     throw new Error(`网络错误: ${err?.message || err}`);

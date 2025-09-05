@@ -5,28 +5,132 @@
   --primary: #2563eb;
 }
 
+/* Reset and base */
 * { box-sizing: border-box; }
 html, body, #root { height: 100%; margin: 0; }
-body { font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica,Arial,"PingFang SC","Microsoft YaHei","Noto Sans CJK SC",sans-serif; color: var(--text); background: var(--bg); }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, "PingFang SC",
+    "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
 
+/* Buttons (for custom ones; @dhis2/ui buttons use their own styles) */
 button {
   padding: 6px 12px;
-  background: white;
+  background: #fff;
   border: 1px solid var(--border);
   border-radius: 4px;
   cursor: pointer;
 }
 button:hover { border-color: var(--primary); color: var(--primary); }
 
-select, input[type="date"] {
+/* Form controls */
+select, input[type="date"], input[type="text"] {
   padding: 6px 8px;
   border: 1px solid var(--border);
   border-radius: 4px;
-  background: white;
+  background: #fff;
 }
 
-.filters-bar, .action-bar, .selection-info { padding: 12px 16px; background: #fff; border-bottom: 1px solid var(--border); }
-.table-container { background: #fff; margin: 12px 16px; padding: 12px; border: 1px solid var(--border); border-radius: 8px; }
-table { width: 100%; border-collapse: collapse; }
+/* Bars and containers */
+.filters-bar, .action-bar, .selection-info {
+  padding: 12px 16px;
+  background: #fff;
+  border-bottom: 1px solid var(--border);
+}
+.table-container {
+  background: #fff;
+  margin: 12px 16px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; background: #fff; }
 th, td { border-bottom: 1px solid var(--border); padding: 8px; text-align: left; }
 thead th { background: #fafafa; }
+
+/* AppShell layout (paired with src/ui/AppShell.css) */
+.app-shell {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  grid-template-rows: 1fr;
+  height: calc(100vh - 48px); /* HeaderBar height compensation */
+}
+.app-main {
+  overflow: auto;
+  background: var(--bg);
+}
+
+/* Sidebar styles (paired with src/ui/Sidebar.css) */
+.sidebar {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+}
+.sidebar-title {
+  font-weight: 700;
+  padding: 12px 8px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+.sidebar-group { padding: 8px 0; }
+.sidebar-group-title {
+  font-size: 12px;
+  color: #6b7280;
+  padding: 6px 8px;
+}
+.sidebar-link {
+  display: block;
+  color: #111827;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  margin: 2px 4px;
+}
+.sidebar-link:hover { background: #f3f4f6; }
+.sidebar-link-active { background: #e5edff; color: var(--primary); font-weight: 600; }
+.sidebar-sublist {
+  padding-left: 8px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Utility */
+.text-center { text-align: center; }
+.mt-8 { margin-top: 8px; }
+.mt-12 { margin-top: 12px; }
+.mt-16 { margin-top: 16px; }
+
+/* Modal overlay for ResultModal and AuditDialog (EventListView) */
+.d2-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1100;
+}
+.d2-modal-card {
+  background: #fff;
+  width: min(720px, 92vw);
+  max-height: 80vh;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  display: flex;
+  flex-direction: column;
+}
+.d2-modal-header {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.d2-modal-body {
+  padding: 16px;
+}

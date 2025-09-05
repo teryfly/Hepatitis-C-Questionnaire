@@ -1,0 +1,19 @@
+{
+  "appType": "APP",
+  "name": "Hepatitis-C-Questionnaire",
+  "short_name": "疾控问卷",
+  "description": "带审核功能的问卷APP",
+  "version": "v0.1",
+  "launch_path": "index.html",
+  "icons": [
+    {
+      "src": "icon.png",
+      "sizes": "48x48"
+    }
+  ],
+  "activities": {
+    "dhis": {
+      "href": "../../"
+    }
+  }
+}

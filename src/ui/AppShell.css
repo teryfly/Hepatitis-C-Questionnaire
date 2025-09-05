@@ -1,0 +1,17 @@
+.app-shell {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  grid-template-rows: 1fr;
+  height: calc(100vh - 48px);
+}
+
+.sidebar-wrapper {
+  height: 100%;
+  padding: 8px;
+  background: #f7f8fa;
+}
+
+.app-main {
+  overflow: auto;
+  background: var(--bg);
+}
