@@ -4,6 +4,9 @@
   "description": "带审核功能的问卷APP",
   "type": "module",
   "private": true,
+  "engines": {
+    "node": ">=18 <22"
+  },
   "scripts": {
     "start": "d2-app-scripts start",
     "build": "d2-app-scripts build",
@@ -12,17 +15,18 @@
     "i18n:compile": "d2-app-scripts i18n compile"
   },
   "dependencies": {
-    "@dhis2/app-runtime": "^3.10.0",
-    "@dhis2/ui": "^9.16.0",
-    "@tanstack/react-query": "^4.29.19",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.23.0"
+    "@dhis2/app-runtime": "3.14.1",
+    "@dhis2/ui": "9.8.0",
+    "@tanstack/react-query": "4.29.19",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-router-dom": "6.23.0"
   },
   "devDependencies": {
-    "@dhis2/cli-app-scripts": "^11.2.0",
-    "@types/react": "^18.2.21",
-    "@types/react-dom": "^18.2.7",
-    "typescript": "^5.4.5"
+    "@dhis2/cli-app-scripts": "11.2.0",
+    "@types/react": "18.2.21",
+    "@types/react-dom": "18.2.7",
+    "react-refresh": "0.14.0",
+    "typescript": "5.4.5"
   }
 }

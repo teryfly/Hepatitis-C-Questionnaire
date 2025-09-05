@@ -1,7 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { Provider as AppRuntimeProvider } from "@dhis2/app-runtime";
-import { CssVariables, HeaderBar } from "@dhis2/ui";
+import { CssVariables } from "@dhis2/ui";
 import { BrowserRouter } from "react-router-dom";
 import { App } from "./runtime/App";
 import "./styles/global.css";

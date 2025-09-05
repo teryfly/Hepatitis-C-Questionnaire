@@ -87,7 +87,7 @@ export const Sidebar: React.FC = () => {
           </div>
         )}
 
-        <Divider margin="8px 0" />
+        <Divider />
 
         <Button
           small
