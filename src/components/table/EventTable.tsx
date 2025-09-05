@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { deleteEvent } from "../../services/events";
+import { BASE_URL } from "../../utils/baseUrl";
+import { removeApiPath } from "../../utils/download";
 
 interface EventTableProps {
   data: any[];
@@ -10,9 +12,9 @@ interface EventTableProps {
 
 const headerBase = [
   { key: "orgUnitName", label: "报告地区" },
-  { key: "siteName", label: "哨点单位" },
+  // { key: "siteName", label: "哨点单位" },
   { key: "occurredAt", label: "调查日期" },
-  { key: "statusText", label: "状态" }
+  // { key: "statusText", label: "状态" }
 ];
 
 const statusMap: Record<string, string> = {
@@ -48,7 +50,7 @@ const EventTable: React.FC<EventTableProps> = ({
   }, [data]);
 
   const handleEdit = (row: any) => {
-    window.open(`/apps/capture#/viewEvent?orgUnitId=${row.orgUnit}&viewEventId=${row.event}`, "_blank");
+    window.open(`${removeApiPath(BASE_URL)}apps/capture#/viewEvent?orgUnitId=${row.orgUnit}&viewEventId=${row.event}`, "_blank");
   };
 
   const handleDelete = async (row: any) => {
@@ -104,12 +106,12 @@ const EventTable: React.FC<EventTableProps> = ({
               />
             </td>
             <td>{row.orgUnitName}</td>
-            <td>{row.siteName}</td>
+            {/* <td>{row.siteName}</td> */}
             <td>{row.occurredAt?.slice(0, 10) || ""}</td>
-            <td>{statusMap[row.status] || row.status || "待审核"}</td>
+            {/* <td>{statusMap[row.status] || row.status || "待审核"}</td> */}
             {dynamicHeaders.map(h => (
               <td key={h.key}>
-                {(row.dataValues || []).find((dv: any) => dv.displayName === h.label)?.value ?? ""}
+                {(row.dataValues || []).find((dv: any) => dv.displayName === h.label)?.valueName ?? ""}
               </td>
             ))}
             <td>

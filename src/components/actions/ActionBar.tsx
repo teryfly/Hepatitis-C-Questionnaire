@@ -1,6 +1,7 @@
 import React from "react";
 import { exportEvents, exportTracked } from "../../services/export";
-
+import { BASE_URL } from "../../utils/baseUrl";
+import { removeApiPath } from "../../utils/download";
 interface ActionBarProps {
   type: "event" | "tracked";
   filters: any;
@@ -24,7 +25,7 @@ export const ActionBar: React.FC<ActionBarProps> = ({
     const orgUnitId = filters.orgUnits[filters.orgUnits.length - 1];
     const programId = filters.programId;
     window.open(
-      `/apps/capture#/new?orgUnitId=${orgUnitId}&programId=${programId}`,
+      `${removeApiPath(BASE_URL)}apps/capture#/new?orgUnitId=${orgUnitId}&programId=${programId}`,
       "_blank"
     );
   };
@@ -37,10 +38,10 @@ export const ActionBar: React.FC<ActionBarProps> = ({
   return (
     <div className="action-bar">
       <button onClick={handleAdd} style={{ marginRight: 8 }}>+新增</button>
-      <button onClick={handleExport} style={{ marginRight: 8 }}>↓导出</button>
+      {/* <button onClick={handleExport} style={{ marginRight: 8 }}>↓导出</button>
       <button onClick={onApply || (() => alert("申请功能开发中"))} style={{ marginRight: 8 }}>🗎申请</button>
-      <button onClick={onAudit || (() => alert("审核功能开发中"))}>✓审核</button>
-      <button onClick={onRefresh} style={{ marginLeft: 16 }}>刷新</button>
+      <button onClick={onAudit || (() => alert("审核功能开发中"))}>✓审核</button> */}
+      <button onClick={onRefresh}>刷新</button>
     </div>
   );
 };

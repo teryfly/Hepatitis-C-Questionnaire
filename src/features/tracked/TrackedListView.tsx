@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { FiltersBar } from "../../components/filters/FiltersBar";
 import { ActionBar } from "../../components/actions/ActionBar";
-import { SelectionInfo } from "../../components/info/SelectionInfo";
+// import { SelectionInfo } from "../../components/info/SelectionInfo";
 import { TableContainer } from "../../components/table/TableContainer";
 import { useTrackedEntitiesList } from "../../hooks/useTrackedEntitiesList";
 import { usePrograms } from "../../hooks/usePrograms";
@@ -32,7 +32,7 @@ export const TrackedListView: React.FC<{ selectedProgramId: string }> = ({ selec
         onSearch={refetch}
       />
       <ActionBar type="tracked" filters={filters} onRefresh={refetch} />
-      <SelectionInfo />
+      {/* <SelectionInfo /> */}
       <TableContainer
         type="tracked"
         data={data?.trackedEntities || []}

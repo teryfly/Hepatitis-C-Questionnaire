@@ -1,5 +1,9 @@
 import { fetchWithAuth } from "./http";
-import { getOrgUnitName } from "./orgUnits";
+import { 
+  getOrgUnitName, 
+  getProgramTrackedEntityAttributes,
+  filterAndMergeData
+ } from "./orgUnits";
 
 // 随访数据列表（API-07）
 export async function getTrackedEntitiesList(filters: any) {
@@ -22,7 +26,7 @@ export async function getTrackedEntitiesList(filters: any) {
 
   const url = `/tracker/trackedEntities?${params.toString()}`;
   const res = await fetchWithAuth(url);
-
+  const titleData = await getProgramTrackedEntityAttributes(filters.programId);
   const trackedEntities = (res.trackedEntities || []).map((te: any) => {
     const orgUnitName = getOrgUnitName(te.orgUnit);
     return {
@@ -35,6 +39,7 @@ export async function getTrackedEntitiesList(filters: any) {
       trackedEntity: te.trackedEntity,
       enrollment: te.enrollments?.[0]?.enrollment,
       programId: filters.programId,
+      attributes: filterAndMergeData(te.attributes, titleData)
     };
   });
 

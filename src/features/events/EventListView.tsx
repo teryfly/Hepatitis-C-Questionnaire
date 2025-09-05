@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { FiltersBar } from "../../components/filters/FiltersBar";
 import { ActionBar } from "../../components/actions/ActionBar";
-import { SelectionInfo } from "../../components/info/SelectionInfo";
+// import { SelectionInfo } from "../../components/info/SelectionInfo";
 import { TableContainer } from "../../components/table/TableContainer";
 import { useEventsList } from "../../hooks/useEventsList";
 import { usePrograms } from "../../hooks/usePrograms";
@@ -103,17 +103,18 @@ export const EventListView: React.FC<{ selectedProgramId: string }> = ({ selecte
     }
   }, [data?.events]);
 
-  const handleFiltersChange = (next: any) => {
-    const orgUnits = next.orgUnits ?? filters.orgUnits ?? [];
-    const orgUnitId = orgUnits.length > 0 ? orgUnits[orgUnits.length - 1] : undefined;
-    setFilters((f: any) => ({
-      ...f,
-      ...next,
-      orgUnits,
-      orgUnitId,
-      page: 1
-    }));
-  };
+  // onChange={handleFiltersChange}
+  // const handleFiltersChange = (next: any) => {
+  //   const orgUnits = next.orgUnits ?? filters.orgUnits ?? [];
+  //   const orgUnitId = orgUnits.length > 0 ? orgUnits[orgUnits.length - 1] : undefined;
+  //   setFilters((f: any) => ({
+  //     ...f,
+  //     ...next,
+  //     orgUnits,
+  //     orgUnitId,
+  //     page: 1
+  //   }));
+  // };
 
   const handlePageChange = (page: number) => {
     setFilters((f: any) => ({ ...f, page }));
@@ -326,7 +327,7 @@ export const EventListView: React.FC<{ selectedProgramId: string }> = ({ selecte
       return auditDE?.value === filters.auditStatus;
     });
   }, [data, filters.auditStatus]);
-
+  
   return (
     <div className="event-list-view">
       <FiltersBar
@@ -334,11 +335,13 @@ export const EventListView: React.FC<{ selectedProgramId: string }> = ({ selecte
         programs={programs}
         isLoading={loadingPrograms}
         filters={filters}
-        onChange={handleFiltersChange}
+        onChange={(f) => setFilters({ ...f, programId: selectedProgramId })}
         onSearch={handleSearch}
       />
       <ActionBar type="event" filters={filters} onRefresh={refetch} onApply={handleApply} onAudit={handleAudit} />
-      <SelectionInfo />
+      {/* {selectedIds.length == 0 && ( 
+        <SelectionInfo />
+      )} */}
       <TableContainer
         type="event"
         data={filteredEvents}
